@@ -1,0 +1,8 @@
+{
+    "errors": [
+        {
+            "reason": "Must be 25-500",
+            "field": "page_size"
+        }
+    ]
+}

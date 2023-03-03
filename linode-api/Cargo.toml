@@ -16,3 +16,6 @@ readme = "README.md"
 serde = { version = "1", default-features = false, features = ["std", "derive"] }
 serde-enum-str = { version = "0.3", default-features = false }
 http = { version = "0.2", default-features = false }
+
+[dev-dependencies]
+serde_json = { version = "1" }

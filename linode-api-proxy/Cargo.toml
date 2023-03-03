@@ -1,0 +1,29 @@
+[package]
+name = "linode-api-proxy"
+version = "0.0.0"
+authors = ["vkill <vkill.net@gmail.com>"]
+edition = "2021"
+description = "Linode API Proxy"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/bk-rs/linode-rs"
+homepage = "https://github.com/bk-rs/linode-rs"
+documentation = "https://docs.rs/linode-api-proxy"
+keywords = []
+categories = []
+readme = "README.md"
+
+[dependencies]
+linode-api = { version = "0.0", path = "../linode-api" }
+
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
+axum = { version = "0.6", default_features = false, features = ["tokio", "http1", "json", "query"] }
+reqwest = { version = "0.11", features = ["stream"] }
+
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1" }
+serde_qs = { version = "0.12" }
+clap = { version = "4", features = ["derive"] }
+wrapping-macro = { version = "0.2" }
+
+pretty_env_logger = { version = "0.4" }
+log = { version = "0.4" }
