@@ -1,0 +1,15 @@
+[package]
+name = "linode-api"
+version = "0.0.0"
+authors = ["vkill <vkill.net@gmail.com>"]
+edition = "2021"
+description = "Linode API"
+license = "Apache-2.0 OR MIT"
+repository = "https://github.com/bk-rs/linode-rs"
+homepage = "https://github.com/bk-rs/linode-rs"
+documentation = "https://docs.rs/linode-api"
+keywords = []
+categories = []
+readme = "README.md"
+
+[dependencies]
