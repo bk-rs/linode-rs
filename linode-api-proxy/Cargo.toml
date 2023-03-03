@@ -17,6 +17,7 @@ linode-api = { version = "0.0", path = "../linode-api" }
 
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
 axum = { version = "0.6", default_features = false, features = ["tokio", "http1", "json", "query"] }
+hyper = { version = "0.14", default_features = false }
 reqwest = { version = "0.11", features = ["stream"] }
 
 serde = { version = "1", features = ["derive"] }
@@ -24,6 +25,7 @@ serde_json = { version = "1" }
 serde_qs = { version = "0.12" }
 clap = { version = "4", features = ["derive"] }
 wrapping-macro = { version = "0.2" }
+hyper-body-to-bytes = { version = "0.1" }
 
 pretty_env_logger = { version = "0.4" }
 log = { version = "0.4" }

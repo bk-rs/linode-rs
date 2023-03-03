@@ -1,3 +1,2 @@
 //
-pub mod error;
-pub use error::{Error, ErrorResponseBody};
+pub mod v4;

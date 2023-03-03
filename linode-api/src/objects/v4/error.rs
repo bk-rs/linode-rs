@@ -43,7 +43,7 @@ mod tests {
     #[test]
     fn test_de_error_response_body() {
         match serde_json::from_str::<ErrorResponseBody>(include_str!(
-            "../../tests/response_body_files/error__with_invalid_token.json"
+            "../../../tests/response_body_files/error__with_invalid_token.json"
         )) {
             Ok(json) => {
                 assert_eq!(json.errors.len(), 1);
@@ -54,7 +54,7 @@ mod tests {
         }
 
         match serde_json::from_str::<ErrorResponseBody>(include_str!(
-            "../../tests/response_body_files/error__with_not_found.json"
+            "../../../tests/response_body_files/error__with_not_found.json"
         )) {
             Ok(json) => {
                 assert_eq!(json.errors.len(), 1);
@@ -65,7 +65,7 @@ mod tests {
         }
 
         match serde_json::from_str::<ErrorResponseBody>(include_str!(
-            "../../tests/response_body_files/error__with_page_size_invalid.json"
+            "../../../tests/response_body_files/error__with_page_size_invalid.json"
         )) {
             Ok(json) => {
                 assert_eq!(json.errors.len(), 1);

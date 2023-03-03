@@ -15,9 +15,19 @@ use crate::context::LinodeApiHttpClient;
 
 //
 #[derive(Debug, Clone)]
+#[non_exhaustive]
 pub struct FallbackHandler {
     pub linode_api_http_client: LinodeApiHttpClient,
     pub version: Version,
+}
+
+impl FallbackHandler {
+    pub fn new(linode_api_http_client: LinodeApiHttpClient, version: Version) -> Self {
+        Self {
+            linode_api_http_client,
+            version,
+        }
+    }
 }
 
 impl<T, S> Handler<T, S, Body> for FallbackHandler {
@@ -77,15 +87,15 @@ impl<T, S> Handler<T, S, Body> for FallbackHandler {
                     return Box::pin(async move {
                         let mut resp = match self.version {
                             Version::V4 => {
-                                use linode_api::objects::{
-                                    error::Reason, Error, ErrorResponseBody,
+                                use linode_api::objects::v4::error::{
+                                    Error, ErrorResponseBody, Reason,
                                 };
 
                                 Json(ErrorResponseBody {
                                     errors: vec![Error {
                                         field: None,
                                         reason: Reason::Other(format!(
-                                            "change request uri failed, err:{err}"
+                                            "request uri change failed, err:{err}"
                                         )),
                                     }],
                                 })
@@ -107,7 +117,7 @@ impl<T, S> Handler<T, S, Body> for FallbackHandler {
                 Ok(resp) => resp,
                 Err(err) => match self.version {
                     Version::V4 => {
-                        use linode_api::objects::{error::Reason, Error, ErrorResponseBody};
+                        use linode_api::objects::v4::error::{Error, ErrorResponseBody, Reason};
 
                         let mut resp = Json(ErrorResponseBody {
                             errors: vec![Error {
@@ -129,9 +139,9 @@ impl<T, S> Handler<T, S, Body> for FallbackHandler {
 //
 pub mod internal {
     use axum::{
-        body::{Body as HyperBody, StreamBody as AxumStreamBody},
-        http::{response::Parts as HttpResponseParts, Request as HttpRequest},
-        response::Response,
+        body::{Body as AxumBody, StreamBody as AxumStreamBody},
+        http::Request as HttpRequest,
+        response::Response as AxumResponse,
     };
     use reqwest::Request as ReqwestRequest;
 
@@ -140,27 +150,20 @@ pub mod internal {
     //
     pub async fn reqwest_execute(
         client: &LinodeApiHttpClient,
-        http_req: HttpRequest<HyperBody>,
-    ) -> Result<Response, reqwest::Error> {
+        http_req: HttpRequest<AxumBody>,
+    ) -> Result<AxumResponse, reqwest::Error> {
         let reqwest_req = ReqwestRequest::try_from(http_req)?;
         let reqwest_resp = client.execute(reqwest_req).await?;
         let http_resp = {
-            let (mut parts, _) = Response::new(()).into_parts();
-
-            let HttpResponseParts {
-                status,
-                version,
-                headers,
-                extensions: _,
-                ..
-            } = &mut parts;
-            *status = reqwest_resp.status();
-            *version = reqwest_resp.version();
-            *headers = reqwest_resp.headers().to_owned();
+            let mut resp = AxumResponse::new(());
+            *resp.status_mut() = reqwest_resp.status();
+            *resp.version_mut() = reqwest_resp.version();
+            *resp.headers_mut() = reqwest_resp.headers().to_owned();
 
             let body = AxumStreamBody::new(reqwest_resp.bytes_stream());
 
-            Response::from_parts(parts, axum::body::boxed(body))
+            let (parts, _) = resp.into_parts();
+            AxumResponse::from_parts(parts, axum::body::boxed(body))
         };
         Ok(http_resp)
     }
