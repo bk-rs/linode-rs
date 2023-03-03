@@ -19,6 +19,7 @@ serde_json = { version = "1", default-features = false, features = ["std"] }
 http = { version = "0.2", default-features = false }
 url = { version = "2", default-features = false }
 once_cell = { version = "1", default-features = false, features = ["std"] }
+wrapping-macro = { version = "0.2" }
 
 [dev-dependencies]
 

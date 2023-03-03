@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
-use serde_json::{Map, Value};
+
+use super::linode_view::LinodesViewResponseBody;
 
 //
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -10,10 +11,7 @@ pub struct LinodesListResponseBody {
     pub results: usize,
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct LinodesListResponseBodyDataItem {
-    pub id: u64,
-    pub label: String,
-    #[serde(flatten)]
-    pub _extra: Map<String, Value>,
+wrapping_macro::wrapping! {
+    #[derive(Deserialize, Serialize, Debug, Clone)]
+    pub struct LinodesListResponseBodyDataItem(pub LinodesViewResponseBody);
 }
