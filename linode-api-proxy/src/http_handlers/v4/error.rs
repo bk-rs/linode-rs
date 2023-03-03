@@ -1,6 +1,9 @@
 use axum::{
     extract::Json,
-    http::StatusCode,
+    http::{
+        header::{HeaderName, HeaderValue},
+        StatusCode,
+    },
     response::{IntoResponse, Response},
 };
 use linode_api::objects::v4::error::{Error, ErrorResponseBody, Reason};
@@ -15,7 +18,12 @@ pub enum HandleError {
     BackendResponseStatusCodeMismatch(Response),
     BackendResponseBodyReadFailed(axum::Error),
     BackendResponseBodyDeFailed(serde_json::Error),
-    Other(StatusCode, Reason, Option<String>),
+    Other(
+        StatusCode,
+        Reason,
+        Option<String>,
+        Option<Vec<(HeaderName, HeaderValue)>>,
+    ),
 }
 
 //
@@ -49,7 +57,18 @@ impl IntoResponse for HandleError {
                 Reason::Other(format!("backend response body de failed, err:{err}")),
                 None,
             ),
-            HandleError::Other(status_code, reason, field) => (status_code, reason, field),
+            HandleError::Other(status_code, reason, field, backend_resp_headers) => {
+                let body = Json(ErrorResponseBody {
+                    errors: vec![Error { field, reason }],
+                });
+                let mut resp = (status_code, body).into_response();
+                if let Some(backend_resp_headers) = backend_resp_headers {
+                    for (k, v) in backend_resp_headers {
+                        resp.headers_mut().insert(k, v);
+                    }
+                }
+                return resp;
+            }
         };
 
         let body = Json(ErrorResponseBody {

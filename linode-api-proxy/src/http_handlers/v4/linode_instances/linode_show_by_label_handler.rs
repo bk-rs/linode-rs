@@ -86,7 +86,12 @@ pub async fn handle(
                 .map_err(HandleError::BackendResponseBodyDeFailed)?;
 
         if backend_resp_body_json.data.is_empty() {
-            break;
+            return Err(HandleError::Other(
+                StatusCode::NOT_FOUND,
+                Reason::NotFound,
+                None,
+                Some(backend_resp_headers),
+            ));
         }
 
         if let Some(item) = backend_resp_body_json
@@ -103,12 +108,6 @@ pub async fn handle(
             return Ok(resp);
         }
     }
-
-    Err(HandleError::Other(
-        StatusCode::NOT_FOUND,
-        Reason::NotFound,
-        None,
-    ))
 }
 
 //
