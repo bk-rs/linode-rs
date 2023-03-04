@@ -77,9 +77,12 @@ pub async fn handle(
             .collect::<Vec<_>>();
 
         let backend_resp_body = backend_resp.into_body();
-        let backend_resp_body_bytes = hyper::body::to_bytes(backend_resp_body)
-            .await
-            .map_err(HandleError::BackendResponseBodyReadFailed)?;
+        let backend_resp_body_bytes = http_body_to_bytes::http_body_to_bytes_with_max_length(
+            backend_resp_body,
+            ctx.args.backend_max_response_body_size(),
+        )
+        .await
+        .map_err(HandleError::BackendResponseBodyReadFailed)?;
 
         let backend_resp_body_json: LinodesListResponseBody =
             serde_json::from_slice(&backend_resp_body_bytes)

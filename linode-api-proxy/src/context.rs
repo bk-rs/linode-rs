@@ -10,6 +10,7 @@ wrapping_macro::wrapping! {
 
 //
 pub struct Context {
+    pub args: Args,
     pub linode_api_http_client: LinodeApiHttpClient,
 }
 
@@ -23,6 +24,7 @@ impl Context {
             .into();
 
         Ok(Self {
+            args: args.to_owned(),
             linode_api_http_client,
         })
     }
