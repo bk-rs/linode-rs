@@ -34,7 +34,11 @@ pub async fn handle(
     let req_header_authorization = headers
         .get(AUTHORIZATION)
         .ok_or(HandleError::RequestHeaderAuthorizationRequired)?;
-    if !req_header_authorization.as_bytes().starts_with(b"Bearer ") {
+    if !req_header_authorization
+        .as_bytes()
+        .to_ascii_lowercase()
+        .starts_with(b"bearer ")
+    {
         return Err(HandleError::RequestHeaderAuthorizationRequired);
     }
 
