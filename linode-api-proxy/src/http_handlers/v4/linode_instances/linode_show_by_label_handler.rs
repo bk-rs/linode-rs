@@ -33,14 +33,14 @@ pub async fn handle(
 ) -> Result<Response, HandleError> {
     let req_header_authorization = headers
         .get(AUTHORIZATION)
-        .ok_or(HandleError::AuthenticationRequired)?;
+        .ok_or(HandleError::RequestHeaderAuthorizationRequired)?;
     if !req_header_authorization.as_bytes().starts_with(b"Bearer ") {
-        return Err(HandleError::AuthenticationRequired);
+        return Err(HandleError::RequestHeaderAuthorizationRequired);
     }
 
-    let req_query_str = req_query_str.ok_or(HandleError::ReqQueryMissing)?;
+    let req_query_str = req_query_str.ok_or(HandleError::RequestQueryMissing)?;
     let req_query: ReqQuery =
-        serde_qs::from_str(&req_query_str).map_err(HandleError::ReqQueryDeFailed)?;
+        serde_qs::from_str(&req_query_str).map_err(HandleError::RequestQueryDeFailed)?;
 
     //
     let fallback_handler = FallbackHandler::new(ctx.linode_api_http_client.clone(), Version::V4);
@@ -55,7 +55,7 @@ pub async fn handle(
         *backend_req.method_mut() = Method::GET;
         *backend_req.uri_mut() = backend_req_uri
             .parse()
-            .map_err(HandleError::ReqUriBuildFailed)?;
+            .map_err(HandleError::BackendRequestUriBuildFailed)?;
         backend_req
             .headers_mut()
             .insert(AUTHORIZATION, req_header_authorization.into());

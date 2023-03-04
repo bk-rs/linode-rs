@@ -11,10 +11,10 @@ use linode_api::objects::v4::error::{Error, ErrorResponseBody, Reason};
 //
 #[derive(Debug)]
 pub enum HandleError {
-    AuthenticationRequired,
-    ReqQueryMissing,
-    ReqQueryDeFailed(serde_qs::Error),
-    ReqUriBuildFailed(axum::http::uri::InvalidUri),
+    RequestHeaderAuthorizationRequired,
+    RequestQueryMissing,
+    RequestQueryDeFailed(serde_qs::Error),
+    BackendRequestUriBuildFailed(axum::http::uri::InvalidUri),
     BackendResponseStatusCodeMismatch(Response),
     BackendResponseBodyReadFailed(axum::Error),
     BackendResponseBodyDeFailed(serde_json::Error),
@@ -30,30 +30,32 @@ pub enum HandleError {
 impl IntoResponse for HandleError {
     fn into_response(self) -> Response {
         let (status_code, reason, field) = match self {
-            HandleError::AuthenticationRequired => {
+            HandleError::RequestHeaderAuthorizationRequired => {
                 (StatusCode::UNAUTHORIZED, Reason::InvalidToken, None)
             }
-            HandleError::ReqQueryMissing => {
-                (StatusCode::BAD_REQUEST, Reason::Other("".into()), None)
-            }
-            HandleError::ReqQueryDeFailed(err) => (
+            HandleError::RequestQueryMissing => (
+                StatusCode::BAD_REQUEST,
+                Reason::Other("request query required".into()),
+                None,
+            ),
+            HandleError::RequestQueryDeFailed(err) => (
                 StatusCode::BAD_REQUEST,
                 Reason::Other(format!("request query de failed, err:{err}")),
                 None,
             ),
-            HandleError::ReqUriBuildFailed(err) => (
-                StatusCode::BAD_REQUEST,
-                Reason::Other(format!("request uri build failed, err:{err}")),
+            HandleError::BackendRequestUriBuildFailed(err) => (
+                StatusCode::from_u16(599).expect("Never"),
+                Reason::Other(format!("backend request uri build failed, err:{err}")),
                 None,
             ),
             HandleError::BackendResponseStatusCodeMismatch(resp) => return resp,
             HandleError::BackendResponseBodyReadFailed(err) => (
-                StatusCode::INTERNAL_SERVER_ERROR,
+                StatusCode::from_u16(599).expect("Never"),
                 Reason::Other(format!("backend response body read failed, err:{err}")),
                 None,
             ),
             HandleError::BackendResponseBodyDeFailed(err) => (
-                StatusCode::INTERNAL_SERVER_ERROR,
+                StatusCode::from_u16(599).expect("Never"),
                 Reason::Other(format!("backend response body de failed, err:{err}")),
                 None,
             ),
