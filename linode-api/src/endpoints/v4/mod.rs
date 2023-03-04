@@ -8,3 +8,10 @@ pub static BASE_URL: Lazy<Url> =
 
 pub static BASE_URI: Lazy<Uri> =
     Lazy::new(|| "https://api.linode.com/v4".parse::<Uri>().expect("Never"));
+
+//
+pub mod linode_instances;
+pub mod linode_types;
+
+pub mod error;
+pub use error::*;

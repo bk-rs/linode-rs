@@ -14,5 +14,5 @@ RUST_BACKTRACE=1 RUST_LOG=trace cargo run -p linode-api-proxy -- --http-listen-a
 
 export LINODE_API_TOKEN="xxx"
 curl -H "Authorization: Bearer $LINODE_API_TOKEN" http://127.0.0.1:8080/v4/profile -v
-curl -H "Authorization: Bearer $LINODE_API_TOKEN" 'http://127.0.0.1:8080/v4/linode/instances/show_by_label?label=xxx' -v
+curl -H "Authorization: Bearer $LINODE_API_TOKEN" 'http://127.0.0.1:8080/v4/linode/instances/view_by_label?label=xxx' -v
 ```

@@ -87,14 +87,15 @@ impl<T, S> Handler<T, S, Body> for FallbackHandler {
                     return Box::pin(async move {
                         let mut resp = match self.version {
                             Version::V4 => {
-                                use linode_api::objects::v4::error::{
-                                    Error, ErrorResponseBody, Reason,
+                                use linode_api::{
+                                    endpoints::v4::ErrorResponseBody,
+                                    objects::v4::{Error, ErrorReason},
                                 };
 
                                 Json(ErrorResponseBody {
                                     errors: vec![Error {
                                         field: None,
-                                        reason: Reason::Other(format!(
+                                        reason: ErrorReason::Other(format!(
                                             "request uri change failed, err:{err}"
                                         )),
                                     }],
@@ -117,12 +118,15 @@ impl<T, S> Handler<T, S, Body> for FallbackHandler {
                 Ok(resp) => resp,
                 Err(err) => match self.version {
                     Version::V4 => {
-                        use linode_api::objects::v4::error::{Error, ErrorResponseBody, Reason};
+                        use linode_api::{
+                            endpoints::v4::ErrorResponseBody,
+                            objects::v4::{Error, ErrorReason},
+                        };
 
                         let mut resp = Json(ErrorResponseBody {
                             errors: vec![Error {
                                 field: None,
-                                reason: Reason::Other(format!("respond failed, err:{err}")),
+                                reason: ErrorReason::Other(format!("respond failed, err:{err}")),
                             }],
                         })
                         .into_response();

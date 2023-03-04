@@ -6,7 +6,10 @@ use axum::{
     },
     response::{IntoResponse, Response},
 };
-use linode_api::objects::v4::error::{Error, ErrorResponseBody, Reason};
+use linode_api::{
+    endpoints::v4::ErrorResponseBody,
+    objects::v4::{Error, ErrorReason},
+};
 
 //
 #[derive(Debug)]
@@ -20,7 +23,7 @@ pub enum HandleError {
     BackendResponseBodyDeFailed(serde_json::Error),
     Other(
         StatusCode,
-        Reason,
+        ErrorReason,
         Option<String>,
         Option<Vec<(HeaderName, HeaderValue)>>,
     ),
@@ -31,32 +34,32 @@ impl IntoResponse for HandleError {
     fn into_response(self) -> Response {
         let (status_code, reason, field) = match self {
             HandleError::RequestHeaderAuthorizationRequired => {
-                (StatusCode::UNAUTHORIZED, Reason::InvalidToken, None)
+                (StatusCode::UNAUTHORIZED, ErrorReason::InvalidToken, None)
             }
             HandleError::RequestQueryMissing => (
                 StatusCode::BAD_REQUEST,
-                Reason::Other("request query required".into()),
+                ErrorReason::Other("request query required".into()),
                 None,
             ),
             HandleError::RequestQueryDeFailed(err) => (
                 StatusCode::BAD_REQUEST,
-                Reason::Other(format!("request query de failed, err:{err}")),
+                ErrorReason::Other(format!("request query de failed, err:{err}")),
                 None,
             ),
             HandleError::BackendRequestUriBuildFailed(err) => (
                 StatusCode::from_u16(599).expect("Never"),
-                Reason::Other(format!("backend request uri build failed, err:{err}")),
+                ErrorReason::Other(format!("backend request uri build failed, err:{err}")),
                 None,
             ),
             HandleError::BackendResponseStatusCodeMismatch(resp) => return resp,
             HandleError::BackendResponseBodyReadFailed(err) => (
                 StatusCode::from_u16(599).expect("Never"),
-                Reason::Other(format!("backend response body read failed, err:{err}")),
+                ErrorReason::Other(format!("backend response body read failed, err:{err}")),
                 None,
             ),
             HandleError::BackendResponseBodyDeFailed(err) => (
                 StatusCode::from_u16(599).expect("Never"),
-                Reason::Other(format!("backend response body de failed, err:{err}")),
+                ErrorReason::Other(format!("backend response body de failed, err:{err}")),
                 None,
             ),
             HandleError::Other(status_code, reason, field, backend_resp_headers) => {

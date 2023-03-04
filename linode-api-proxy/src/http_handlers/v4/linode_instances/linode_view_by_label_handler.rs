@@ -15,7 +15,7 @@ use axum::{
     response::{IntoResponse as _, Json, Response},
 };
 use linode_api::{
-    objects::v4::{error::Reason, linode_instances::linodes_list::LinodesListResponseBody},
+    endpoints::v4::linode_instances::LinodesListResponseBody, objects::v4::ErrorReason,
     types::Version,
 };
 use serde::{Deserialize, Serialize};
@@ -95,7 +95,7 @@ pub async fn handle(
         if backend_resp_body_json.data.is_empty() {
             return Err(HandleError::Other(
                 StatusCode::NOT_FOUND,
-                Reason::NotFound,
+                ErrorReason::NotFound,
                 None,
                 Some(backend_resp_headers),
             ));

@@ -15,8 +15,8 @@ pub mod linode_instances;
 pub fn router(ctx: Arc<Context>) -> Router {
     Router::new()
         .route(
-            "/linode/instances/show_by_label",
-            get(linode_instances::linode_show_by_label_handler::handle),
+            "/linode/instances/view_by_label",
+            get(linode_instances::linode_view_by_label_handler::handle),
         )
         .fallback::<_, ()>(FallbackHandler::new(
             ctx.linode_api_http_client.clone(),

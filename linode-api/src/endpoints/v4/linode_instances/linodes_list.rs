@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use super::linode_view::LinodesViewResponseBody;
+use crate::objects::v4::linode_instances::Linode;
 
 //
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -13,5 +13,5 @@ pub struct LinodesListResponseBody {
 
 wrapping_macro::wrapping! {
     #[derive(Deserialize, Serialize, Debug, Clone)]
-    pub struct LinodesListResponseBodyDataItem(pub LinodesViewResponseBody);
+    pub struct LinodesListResponseBodyDataItem(pub Linode);
 }

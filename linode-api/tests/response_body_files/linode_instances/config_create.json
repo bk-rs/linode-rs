@@ -1,0 +1,58 @@
+{
+    "comments": "This is my main Config",
+    "devices": {
+        "sda": {
+            "disk_id": 124458,
+            "volume_id": null
+        },
+        "sdb": {
+            "disk_id": 124458,
+            "volume_id": null
+        },
+        "sdc": {
+            "disk_id": 124458,
+            "volume_id": null
+        },
+        "sdd": {
+            "disk_id": 124458,
+            "volume_id": null
+        },
+        "sde": {
+            "disk_id": 124458,
+            "volume_id": null
+        },
+        "sdf": {
+            "disk_id": 124458,
+            "volume_id": null
+        },
+        "sdg": {
+            "disk_id": 124458,
+            "volume_id": null
+        },
+        "sdh": {
+            "disk_id": 124458,
+            "volume_id": null
+        }
+    },
+    "helpers": {
+        "devtmpfs_automount": false,
+        "distro": true,
+        "modules_dep": true,
+        "network": true,
+        "updatedb_disabled": true
+    },
+    "id": 23456,
+    "interfaces": [
+        {
+            "ipam_address": "10.0.0.1/24",
+            "label": "example-interface",
+            "purpose": "vlan"
+        }
+    ],
+    "kernel": "linode/latest-64bit",
+    "label": "My Config",
+    "memory_limit": 2048,
+    "root_device": "/dev/sda",
+    "run_level": "default",
+    "virt_mode": "paravirt"
+}
