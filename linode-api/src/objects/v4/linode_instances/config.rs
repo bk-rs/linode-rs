@@ -3,7 +3,7 @@ use serde_json::{Map, Value};
 
 //
 wrapping_macro::wrapping_int! {
-    #[derive(Deserialize, Serialize, Debug, Clone, Copy)]
+    #[derive(Deserialize, Serialize, Debug, Clone, Copy, Default)]
     pub struct ConfigId(pub u64);
 }
 

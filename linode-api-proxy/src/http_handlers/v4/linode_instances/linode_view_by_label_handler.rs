@@ -15,8 +15,7 @@ use axum::{
     response::{IntoResponse as _, Json, Response},
 };
 use linode_api::{
-    endpoints::v4::linode_instances::LinodesListResponseBody, objects::v4::ErrorReason,
-    types::Version,
+    endpoints::v4::linode_instances::linodes_list, objects::v4::ErrorReason, types::Version,
 };
 use serde::{Deserialize, Serialize};
 
@@ -88,7 +87,7 @@ pub async fn handle(
         .await
         .map_err(HandleError::BackendResponseBodyReadFailed)?;
 
-        let backend_resp_body_json: LinodesListResponseBody =
+        let backend_resp_body_json: linodes_list::ResponseBody =
             serde_json::from_slice(&backend_resp_body_bytes)
                 .map_err(HandleError::BackendResponseBodyDeFailed)?;
 

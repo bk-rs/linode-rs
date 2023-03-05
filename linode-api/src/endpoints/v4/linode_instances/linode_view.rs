@@ -5,7 +5,7 @@ use crate::objects::v4::linode_instances::Linode;
 //
 wrapping_macro::wrapping! {
     #[derive(Deserialize, Serialize, Debug, Clone)]
-    pub struct LinodeViewResponseBody(pub Linode);
+    pub struct ResponseBody(pub Linode);
 }
 
 #[cfg(test)]
@@ -16,7 +16,7 @@ mod tests {
 
     #[test]
     fn test_de_response_body() {
-        match serde_json::from_str::<LinodeViewResponseBody>(include_str!(
+        match serde_json::from_str::<ResponseBody>(include_str!(
             "../../../../tests/response_body_files/linode_instances/linode_view.json"
         )) {
             Ok(json) => {

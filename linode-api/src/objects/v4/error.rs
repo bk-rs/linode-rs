@@ -1,4 +1,4 @@
-use http::StatusCode;
+use http_api_client::http::StatusCode;
 use serde::{Deserialize, Serialize};
 use serde_enum_str::{Deserialize_enum_str, Serialize_enum_str};
 

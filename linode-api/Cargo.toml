@@ -16,9 +16,10 @@ readme = "README.md"
 serde = { version = "1", default-features = false, features = ["std", "derive"] }
 serde-enum-str = { version = "0.3", default-features = false }
 serde_json = { version = "1", default-features = false, features = ["std"] }
-http = { version = "0.2", default-features = false }
+serde_qs = { version = "0.12", default-features = false }
 url = { version = "2", default-features = false }
 once_cell = { version = "1", default-features = false, features = ["std"] }
 wrapping-macro = { version = "0.2", default-features = false, features = ["alloc"] }
+http-api-client = { version = "0.2", default-features = false }
 
 [dev-dependencies]

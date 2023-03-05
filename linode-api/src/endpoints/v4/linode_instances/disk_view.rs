@@ -5,7 +5,7 @@ use crate::objects::v4::linode_instances::Disk;
 //
 wrapping_macro::wrapping! {
     #[derive(Deserialize, Serialize, Debug, Clone)]
-    pub struct DiskViewResponseBody(pub Disk);
+    pub struct ResponseBody(pub Disk);
 }
 
 #[cfg(test)]
@@ -16,7 +16,7 @@ mod tests {
 
     #[test]
     fn test_de_response_body() {
-        match serde_json::from_str::<DiskViewResponseBody>(include_str!(
+        match serde_json::from_str::<ResponseBody>(include_str!(
             "../../../../tests/response_body_files/linode_instances/disk_view.json"
         )) {
             Ok(json) => {

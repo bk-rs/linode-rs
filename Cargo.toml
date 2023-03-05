@@ -1,5 +1,8 @@
 [workspace]
 members = [
+    # 
     "linode-api",
+    "linode-api/demo",
+    # 
     "linode-api-proxy",
 ]

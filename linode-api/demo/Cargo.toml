@@ -1,0 +1,28 @@
+[package]
+name = "linode-api-demo"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "linode_api_demo_v4_linode_instances_linode_simple"
+path = "src/v4_linode_instances_linode_simple.rs"
+
+[[bin]]
+name = "linode_api_demo_v4_linode_instances_linodes_list"
+path = "src/v4_linode_instances_linodes_list.rs"
+
+[[bin]]
+name = "linode_api_demo_v4_linode_types_types_list"
+path = "src/v4_linode_types_types_list.rs"
+
+[dependencies]
+linode-api = { path = ".." }
+
+http-api-isahc-client = { version = "0.2" }
+
+rand = { version = "0.8" }
+
+futures-lite = { version = "1" }
+async-io = { version = "1" }
+
+env_logger = { version = "0.10" }
