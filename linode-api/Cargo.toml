@@ -1,6 +1,6 @@
 [package]
 name = "linode-api"
-version = "0.0.1"
+version = "0.1.0"
 authors = ["vkill <vkill.net@gmail.com>"]
 edition = "2021"
 description = "Linode API"
@@ -13,13 +13,15 @@ categories = []
 readme = "README.md"
 
 [dependencies]
+http-api-client = { version = "0.2", default-features = false }
+
 serde = { version = "1", default-features = false, features = ["std", "derive"] }
 serde-enum-str = { version = "0.3", default-features = false }
 serde_json = { version = "1", default-features = false, features = ["std"] }
 serde_qs = { version = "0.12", default-features = false }
 url = { version = "2", default-features = false }
+
 once_cell = { version = "1", default-features = false, features = ["std"] }
 wrapping-macro = { version = "0.2", default-features = false, features = ["alloc"] }
-http-api-client = { version = "0.2", default-features = false }
 
 [dev-dependencies]

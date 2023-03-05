@@ -1,6 +1,6 @@
 [package]
 name = "linode-api-proxy"
-version = "0.0.1"
+version = "0.1.0"
 authors = ["vkill <vkill.net@gmail.com>"]
 edition = "2021"
 description = "Linode API Proxy"
@@ -13,7 +13,7 @@ categories = []
 readme = "README.md"
 
 [dependencies]
-linode-api = { version = "0.0", path = "../linode-api" }
+linode-api = { version = "0.1", path = "../linode-api" }
 
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
 axum = { version = "0.6", default_features = false, features = ["tokio", "http1", "json", "query"] }
