@@ -3,9 +3,15 @@ use serde_enum_str::{Deserialize_enum_str, Serialize_enum_str};
 use serde_json::{Map, Value};
 
 //
+wrapping_macro::wrapping_string! {
+    #[derive(Deserialize, Serialize, Debug, Clone)]
+    pub struct TypeId(pub String);
+}
+
+//
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Type {
-    pub id: String,
+    pub id: TypeId,
     pub label: String,
     pub class: TypeClass,
     pub vcpus: usize,

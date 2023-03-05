@@ -3,9 +3,15 @@ use serde_enum_str::{Deserialize_enum_str, Serialize_enum_str};
 use serde_json::{Map, Value};
 
 //
+wrapping_macro::wrapping_int! {
+    #[derive(Deserialize, Serialize, Debug, Clone, Copy)]
+    pub struct DiskId(pub u64);
+}
+
+//
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Disk {
-    pub id: u64,
+    pub id: DiskId,
     pub label: String,
     pub status: DiskStatus,
     #[serde(flatten)]

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::objects::v4::error::Error;
+use crate::objects::v4::Error;
 
 //
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -12,7 +12,7 @@ pub struct ErrorResponseBody {
 mod tests {
     use super::*;
 
-    use crate::objects::v4::error::ErrorReason;
+    use crate::objects::v4::ErrorReason;
 
     #[test]
     fn test_de_response_body() {
