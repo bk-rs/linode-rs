@@ -114,7 +114,9 @@ impl<T, S> Handler<T, S, Body> for FallbackHandler {
         *req.uri_mut() = req_uri;
 
         Box::pin(async move {
-            match internal::reqwest_execute(&self.linode_api_http_client, req).await {
+            match axum_request_send::impl_reqwest::send(self.linode_api_http_client.inner(), req)
+                .await
+            {
                 Ok(resp) => resp,
                 Err(err) => match self.version {
                     Version::V4 => {
@@ -137,38 +139,5 @@ impl<T, S> Handler<T, S, Body> for FallbackHandler {
                 },
             }
         })
-    }
-}
-
-//
-pub mod internal {
-    use axum::{
-        body::{Body as AxumBody, StreamBody as AxumStreamBody},
-        http::Request as HttpRequest,
-        response::Response as AxumResponse,
-    };
-    use reqwest::Request as ReqwestRequest;
-
-    use crate::context::LinodeApiHttpClient;
-
-    //
-    pub async fn reqwest_execute(
-        client: &LinodeApiHttpClient,
-        http_req: HttpRequest<AxumBody>,
-    ) -> Result<AxumResponse, reqwest::Error> {
-        let reqwest_req = ReqwestRequest::try_from(http_req)?;
-        let reqwest_resp = client.execute(reqwest_req).await?;
-        let http_resp = {
-            let mut resp = AxumResponse::new(());
-            *resp.status_mut() = reqwest_resp.status();
-            *resp.version_mut() = reqwest_resp.version();
-            *resp.headers_mut() = reqwest_resp.headers().to_owned();
-
-            let body = AxumStreamBody::new(reqwest_resp.bytes_stream());
-
-            let (parts, _) = resp.into_parts();
-            AxumResponse::from_parts(parts, axum::body::boxed(body))
-        };
-        Ok(http_resp)
     }
 }

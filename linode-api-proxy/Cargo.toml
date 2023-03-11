@@ -18,7 +18,8 @@ linode-api = { version = "0.1", path = "../linode-api" }
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "time"] }
 axum = { version = "0.6", default_features = false, features = ["tokio", "http1", "json", "query"] }
 http-body-to-bytes = { version = "0.1", default_features = false }
-reqwest = { version = "0.11", features = ["stream"] }
+reqwest = { version = "0.11" }
+axum-request-send = { version = "0.1", default_features = false, features = ["impl_reqwest"] }
 
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1" }
